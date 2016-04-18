@@ -16,7 +16,8 @@ class Display
     "\t" => :tab,
     "\r" => :return,
     "\n" => :newline,
-    "\e" => :escape
+    "\e" => :escape,
+    "q" => :quit
   }
 
   MOVES = {
@@ -33,21 +34,36 @@ class Display
   end
 
   def get_input
-    key = KEYMAP[read_char]
+    key = KEYMAP[STDIN.getc.chr]
     handle_key(key)
   end
 
   def handle_key(key)
+    case key
+    when :up, :down, :right, :left
+      update_pos(MOVES[key])
+    when :quit
+      exit(0)
+    end
 
+
+  end
+
+  def update_pos(diff)
+    new_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
+    @cursor_pos = new_pos #if @board.in_bounds?(new_pos)
   end
 
   def render
     (0...8).each do |row_idx|
       switch_background_color
       (0...8).each do |col_idx|
+        bc = background_color
         pos = [row_idx, col_idx]
+        bc = :yellow if pos == cursor_pos
+
         space_val = @board[pos] || " "
-        print "#{space_val} ".colorize(color: :red,background: background_color)
+        print "#{space_val} ".colorize(color: :red,background: bc)
         switch_background_color
       end
       puts
@@ -65,7 +81,10 @@ end
 
 b = Board.new
 display = Display.new b
-display.render
-
+while true
+  system('clear')
+  display.render
+  cursor_move = display.get_input
+end
 
 # puts "Hello world".colorize(color: :white, background: :black )
