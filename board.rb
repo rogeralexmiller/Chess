@@ -1,3 +1,5 @@
+
+
 class Board
 
   def initialize
@@ -56,5 +58,5 @@ class Piece
 
 end
 
-board = Board.new
-board.show_board
+# board = Board.new
+# board.show_board
