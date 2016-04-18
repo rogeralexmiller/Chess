@@ -76,7 +76,8 @@ class SlidingPiece < Piece
   def check_along_direction(moves, delta)
     starting_pos = SlidingPiece.next_pos(@pos, delta)
     while @board.in_bounds?(starting_pos) #&& not @board[current_pos]
-      if board[starting_pos]
+      unless board[starting_pos].nil?
+        debugger
         piece_here = @board[starting_pos]
         moves << starting_pos unless piece_here.color == self.color
         break

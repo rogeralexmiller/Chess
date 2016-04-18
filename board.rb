@@ -56,7 +56,7 @@ class Board
 end
 
 board = Board.new
-rook = Bishop.new(board, :white, [4,4])
-board[ [4,4] ] = bishop
+rook = Rook.new(board, :white, [4,4])
+board[ [4,4] ] = rook
 # p bishop
-p bishop.moves
+p rook.moves
