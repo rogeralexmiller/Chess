@@ -14,7 +14,7 @@ class Display
     "s" => :down,
     "d" => :right,
     "\t" => :tab,
-    "\r" => :return,
+    "\r" => :select,
     "\n" => :newline,
     "\e" => :escape,
     "q" => :quit
@@ -29,6 +29,7 @@ class Display
 
   def initialize(board,pos = [0,0])
     @cursor_pos = pos
+    @selected = false
     @board = board
     @background_color = :black
   end
@@ -44,9 +45,10 @@ class Display
       update_pos(MOVES[key])
     when :quit
       exit(0)
+    when :select
+      # other stuff
+      @selected = !selected
     end
-
-
   end
 
   def update_pos(diff)
@@ -71,7 +73,7 @@ class Display
   end
 
   private
-  attr_reader :cursor_pos, :board, :background_color
+  attr_reader :cursor_pos, :board, :background_color, :selected
 
   def switch_background_color
     @background_color = (background_color == :white) ? :black : :white
@@ -86,5 +88,3 @@ while true
   display.render
   cursor_move = display.get_input
 end
-
-# puts "Hello world".colorize(color: :white, background: :black )

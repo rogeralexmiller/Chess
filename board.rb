@@ -1,4 +1,4 @@
-
+require_relative 'piece'
 
 class Board
 
@@ -8,13 +8,20 @@ class Board
   end
 
   def setup_board
-    @grid[0..1].each do |row|
-      row.map! {|space| Piece.new("black")}
+    @grid[0..1].each_with_index do |row, row_idx|
+      row.each_with_index do |space, col_idx|
+        pos = [row_idx,col_idx]
+        self[pos] = Piece.new(self,"black",pos)
+      end
     end
 
-    @grid[-2..-1].each do |row|
-      row.map! { |space| Piece.new("white") }
+    @grid[-2..-1].each_with_index do |row, row_idx|
+      row.each_with_index do |space, col_idx|
+        pos = [row_idx,col_idx]
+        self[pos] = Piece.new(self,"white",pos)
+      end
     end
+
   end
 
   def show_board
@@ -42,21 +49,14 @@ class Board
     self[start_pos] = nil
   end
 
-end
-
-class Piece
-
-  attr_reader :color
-
-  def initialize(color)
-    @color = color
-  end
-
-  def to_s
-    @color[0]
+  def in_bounds?(pos)
+    pos.all? { |coord| coord.between?(0,7) }
   end
 
 end
 
-# board = Board.new
-# board.show_board
+board = Board.new
+rook = Bishop.new(board, :white, [4,4])
+board[ [4,4] ] = bishop
+# p bishop
+p bishop.moves
