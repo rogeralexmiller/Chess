@@ -55,10 +55,14 @@ class Board
     pos.all? { |coord| coord.between?(0,7) }
   end
 
+  def piece_here(pos)
+    self[pos]
+  end
+
 end
 
 board = Board.new
-queen = Queen.new(board, :white, [4,4])
-board[ [4,4] ] = queen
+king = King.new(board, :black, [2,2])
+board[ [2,2] ] = king
 # p bishop
-p queen.moves
+p king.moves

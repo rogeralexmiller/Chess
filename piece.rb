@@ -14,12 +14,12 @@ class Piece
     @color[0]
   end
 
+  def self.add_positions(pos, delta)
+    [pos[0] + delta[0], pos[1] + delta[1]]
+  end
+
   private
   attr_reader :pos, :board
-
-end
-
-class SteppingPiece < Piece
 
 end
 
@@ -74,7 +74,7 @@ class SlidingPiece < Piece
 
   protected
   def check_along_direction(moves, delta)
-    current_pos = SlidingPiece.next_pos(@pos, delta)
+    current_pos = Piece.add_positions(@pos, delta)
     while @board.in_bounds?(current_pos)
       unless board[current_pos].nil?
         piece_here = @board[current_pos]
@@ -83,12 +83,8 @@ class SlidingPiece < Piece
       end
       moves << current_pos
 
-      current_pos = SlidingPiece.next_pos(current_pos, delta)
+      current_pos = Piece.add_positions(current_pos, delta)
     end
-  end
-
-  def self.next_pos(pos, delta)
-    [pos[0] + delta[0], pos[1] + delta[1]]
   end
 
 end
@@ -108,5 +104,36 @@ end
 class Queen < SlidingPiece
   def move_dirs
     [:diagonal, :lateral]
+  end
+end
+
+class SteppingPiece < Piece
+  DELTAS = {
+    :up => [-1, 0],
+    :down => [1, 0],
+    :left => [0, -1],
+    :right => [0, 1],
+    :upright => [-1, 1],
+    :downright => [1, 1],
+    :downleft => [1, -1],
+    :upleft => [-1, -1]
+  }
+end
+
+class King < SteppingPiece
+  # Make sure to account for moving into check
+  def moves
+    moves = []
+
+    DELTAS.each do |dir, delta|
+      potential_move = Piece.add_positions(@pos, delta)
+      if @board.in_bounds?(potential_move)
+        piece = @board.piece_here(potential_move)
+        if piece.nil? || piece.color != self.color
+          moves << potential_move
+        end
+      end
+    end
+    moves
   end
 end
