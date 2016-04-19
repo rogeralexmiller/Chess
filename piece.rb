@@ -14,8 +14,16 @@ class Piece
     @color[0]
   end
 
-  def self.add_positions(pos, delta)
-    [pos[0] + delta[0], pos[1] + delta[1]]
+  def self.add_positions(*positions)
+    #[pos[0] + delta[0], pos[1] + delta[1]]
+    new_position = Array.new(2, 0)
+
+    positions.each do |pos|
+      new_position[0] += pos[0]
+      new_position[1] += pos[1]
+    end
+
+    new_position
   end
 
   private
@@ -118,14 +126,11 @@ class SteppingPiece < Piece
     :downleft => [1, -1],
     :upleft => [-1, -1]
   }
-end
 
-class King < SteppingPiece
-  # Make sure to account for moving into check
-  def moves
+  def moves_helper(deltas)
     moves = []
 
-    DELTAS.each do |dir, delta|
+    deltas.each do |delta|
       potential_move = Piece.add_positions(@pos, delta)
       if @board.in_bounds?(potential_move)
         piece = @board.piece_here(potential_move)
@@ -134,6 +139,34 @@ class King < SteppingPiece
         end
       end
     end
+
     moves
   end
+end
+
+class King < SteppingPiece
+  # Make sure to account for moving into check
+  def moves
+    moves_helper(SteppingPiece::DELTAS.values)
+  end
+end
+
+class Knight < SteppingPiece
+
+  MOVES = [
+    Piece.add_positions(DELTAS[:up], DELTAS[:up], DELTAS[:right]),
+    Piece.add_positions(DELTAS[:up], DELTAS[:up], DELTAS[:left]),
+    Piece.add_positions(DELTAS[:up], DELTAS[:left], DELTAS[:left]),
+    Piece.add_positions(DELTAS[:up], DELTAS[:right], DELTAS[:right]),
+
+    Piece.add_positions(DELTAS[:down], DELTAS[:right], DELTAS[:right]),
+    Piece.add_positions(DELTAS[:down], DELTAS[:left], DELTAS[:left]),
+    Piece.add_positions(DELTAS[:down], DELTAS[:down], DELTAS[:right]),
+    Piece.add_positions(DELTAS[:down], DELTAS[:down], DELTAS[:left])
+  ]
+
+  def moves
+    moves_helper(Knight::MOVES)
+  end
+
 end
