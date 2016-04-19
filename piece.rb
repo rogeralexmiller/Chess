@@ -8,6 +8,7 @@ class Piece
   }
 
   attr_reader :color
+  attr_accessor :pos
 
   def initialize(board, color, pos)
     @pos = pos
@@ -237,6 +238,10 @@ class Pawn < SteppingPiece
 
   def to_s
     "P"
+  end
+
+  def dup
+    Pawn.new(@board, @color, @pos)
   end
 
 end

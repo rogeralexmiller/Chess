@@ -9,6 +9,12 @@ class Board
   end
 
   def setup_board
+    place_pawns
+    place_minor_pieces
+    place_major_pieces
+  end
+
+  def place_pawns
     [@grid[1], @grid[6]].each_with_index do |row, color|
       row.each_with_index do |space, col_idx|
         # debugger
@@ -18,7 +24,9 @@ class Board
         self[pos] = Pawn.new(self, piece_color, pos)
       end
     end
+  end
 
+  def place_minor_pieces
     [Rook, Knight, Bishop].each_with_index do |piece_class, i|
       white_left = [7,i]
       white_right = [7,7-i]
@@ -30,6 +38,17 @@ class Board
       self[black_left] = piece_class.new(self, :black, black_left)
       self[black_right] = piece_class.new(self, :black, black_right)
     end
+  end
+
+  def place_major_pieces
+    black_king_pos = [0, 4]
+    black_queen_pos = [0, 3]
+    white_king_pos = [7, 4]
+    white_queen_pos = [7, 3]
+    self[black_king_pos] = King.new(self, :black, black_king_pos)
+    self[black_queen_pos] = Queen.new(self, :black, black_queen_pos)
+    self[white_king_pos] = King.new(self, :white, white_king_pos)
+    self[white_queen_pos] = Queen.new(self, :white, white_queen_pos)
   end
 
   def show_board

@@ -31,7 +31,7 @@ class Display
     @cursor_pos = pos
     @selected = false
     @board = board
-    @background_color = :black
+    @background_color = :faux_white
   end
 
   def get_input
@@ -72,7 +72,7 @@ class Display
           colorize_color = :black
         end
 
-        print "#{space_val} ".colorize(color: colorize_color, background: bc)
+        print " #{space_val} ".colorize(color: colorize_color, background: bc).bold
         switch_background_color
       end
       puts
@@ -83,7 +83,7 @@ class Display
   attr_reader :cursor_pos, :board, :background_color, :selected
 
   def switch_background_color
-    @background_color = (background_color == :white) ? :black : :white
+    @background_color = (background_color == :faux_white) ? :white : :faux_white
   end
 
 end
