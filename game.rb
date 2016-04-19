@@ -36,6 +36,7 @@ class Game
       @board.move(@display.selected, cursor_position)
       @display.selected = nil
       @display.highlighted_positions = []
+      switch_player_turn
     end
   end
 
@@ -43,10 +44,11 @@ class Game
     until @board.checkmate?(:white) || @board.checkmate?(:black)
       system('clear')
       @display.render
+      puts "#{@player_turn} is in check" if @board.in_check?(@player_turn)
       @display.get_input
-      switch_player_turn
     end
 
+    system('clear')
     @display.render
     puts "Game over!"
     # puts @board.checkmate?(:white)

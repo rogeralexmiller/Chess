@@ -72,8 +72,12 @@ class Board
     if self.piece_here(end_pos) && self[end_pos].color == self[start_pos].color
       raise "That's not a valid space to move to"
     end
+
     self[end_pos] = self[start_pos]
+
+    # Moved piece is now at self[end_pos]
     self[end_pos].pos = end_pos
+    self[end_pos].moved = true
     self[start_pos] = nil
   end
 
@@ -110,7 +114,6 @@ class Board
   end
 
   def checkmate?(color)
-    opponent_color = color == :white ? :black : :white
     return false unless in_check?(color)
     get_pieces(color).all? { |piece| piece.valid_moves.empty? }
   end

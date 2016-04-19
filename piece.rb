@@ -8,12 +8,13 @@ class Piece
   }
 
   attr_reader :color
-  attr_accessor :pos
+  attr_accessor :pos, :moved
 
   def initialize(board, color, pos)
     @pos = pos
     @color = color
     @board = board
+    @moved = false
   end
 
   def valid_moves
@@ -147,12 +148,6 @@ class Queen < SlidingPiece
 end
 
 class SteppingPiece < Piece
-  attr_accessor :moved
-
-  def initialize(board, color, pos)
-    super
-    @moved = false
-  end
 
   DELTAS = {
     :up => [-1, 0],

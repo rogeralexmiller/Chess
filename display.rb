@@ -64,7 +64,7 @@ class Display
 
   def update_pos(diff)
     new_pos = Piece.add_positions(@cursor_pos, diff)
-    @cursor_pos = new_pos
+    @cursor_pos = new_pos if @board.in_bounds?(new_pos)
   end
 
   def highlight_valid_moves
