@@ -57,7 +57,8 @@ class Game
 
     system('clear')
     @display.render
-    puts "Game over!"
+    switch_player_turn
+    puts "#{@player_turn} wins!"
     # puts @board.checkmate?(:white)
   end
 

@@ -73,6 +73,7 @@ class Display
   end
 
   def render
+    puts "\n"
     (0...8).each do |row_idx|
       switch_background_color
 
@@ -104,7 +105,6 @@ class Display
       end
       puts
     end
-
     puts '    ' + ("A".."H").to_a.join('  ')
   end
 

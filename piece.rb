@@ -23,8 +23,6 @@ class Piece
       begin
         board_dup.move(@pos,move)
       rescue RuntimeError => e
-        puts "IN OUR RESCUE!!!!!!"
-
         puts e.message
         puts e.backtrace
         exit(0)
