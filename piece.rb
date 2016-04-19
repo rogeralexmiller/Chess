@@ -238,9 +238,11 @@ class Pawn < SteppingPiece
     right_take = Piece.add_positions(front_pos,DELTAS[:right])
 
     [left_take, right_take].each do |take|
-      piece = @board.piece_here(take)
-      if @board.in_bounds?(take) && piece && piece.color != self.color
-        moves << take
+      if @board.in_bounds?(take)
+        piece = @board.piece_here(take)
+        if @board.in_bounds?(take) && piece && piece.color != self.color
+          moves << take
+        end
       end
     end
 

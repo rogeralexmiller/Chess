@@ -14,6 +14,7 @@ class Game
     @player_turn = @player_turn == :white ? :black : :white
   end
 
+  # We haven't selected a piece, but we want to
   def select_piece(cursor_position)
     piece = @board.piece_here(cursor_position)
 
@@ -29,6 +30,8 @@ class Game
     true
   end
 
+  # We have selected a piece, and we're trying to move it
+  ## OR we want to change our selection
   def move_to_space(cursor_position)
     piece = @board.piece_here(@display.selected)
     moves = @display.highlighted_positions
@@ -37,6 +40,10 @@ class Game
       @display.selected = nil
       @display.highlighted_positions = []
       switch_player_turn
+    elsif piece.color == @player_turn
+      @display.selected = nil
+      @display.highlighted_positions = []
+      select_piece(cursor_position)
     end
   end
 
