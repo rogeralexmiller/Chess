@@ -1,4 +1,5 @@
 require_relative 'piece'
+require 'byebug'
 
 class Board
 
@@ -8,22 +9,27 @@ class Board
   end
 
   def setup_board
-    (0..1).each do |row_idx|
-      row = @grid[row_idx]
+    [@grid[1], @grid[6]].each_with_index do |row, color|
       row.each_with_index do |space, col_idx|
-        pos = [row_idx,col_idx]
-        self[pos] = Piece.new(self,:black,pos)
+        # debugger
+        row_idx = color == 0 ? 1 : 6
+        pos = [row_idx, col_idx]
+        piece_color = color == 0 ? :black : :white
+        self[pos] = Pawn.new(self, piece_color, pos)
       end
     end
 
-    (6..7).each do |row_idx|
-      row = @grid[row_idx]
-      row.each_with_index do |space, col_idx|
-        pos = [row_idx,col_idx]
-        self[pos] = Piece.new(self,:white,pos)
-      end
-    end
+    [Rook, Knight, Bishop].each_with_index do |piece_class, i|
+      white_left = [7,i]
+      white_right = [7,7-i]
+      black_left = [0,i]
+      black_right = [0,7-i]
 
+      self[white_left] = piece_class.new(self, :white, white_left)
+      self[white_right] = piece_class.new(self, :white, white_right)
+      self[black_left] = piece_class.new(self, :black, black_left)
+      self[black_right] = piece_class.new(self, :black, black_right)
+    end
   end
 
   def show_board
@@ -62,7 +68,4 @@ class Board
 end
 
 board = Board.new
-pawn = Pawn.new(board, :black, [2,2])
-board[ [2,2] ] = pawn
-
-p pawn.moves
+board.show_board

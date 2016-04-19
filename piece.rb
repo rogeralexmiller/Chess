@@ -2,16 +2,17 @@ require 'byebug'
 
 class Piece
 
+  RENDER_COLOR = {
+    :white => :green,
+    :black => :red
+  }
+
   attr_reader :color
 
   def initialize(board, color, pos)
     @pos = pos
     @color = color
     @board = board
-  end
-
-  def to_s
-    @color[0]
   end
 
   def self.add_positions(*positions)
@@ -101,11 +102,19 @@ class Bishop < SlidingPiece
   def move_dirs
     [:diagonal]
   end
+
+  def to_s
+    "B"
+  end
 end
 
 class Rook < SlidingPiece
   def move_dirs
     [:lateral]
+  end
+
+  def to_s
+    "R"
   end
 end
 
@@ -113,6 +122,11 @@ class Queen < SlidingPiece
   def move_dirs
     [:diagonal, :lateral]
   end
+
+  def to_s
+    "Q"
+  end
+
 end
 
 class SteppingPiece < Piece
@@ -156,6 +170,10 @@ class King < SteppingPiece
   def moves
     moves_helper(SteppingPiece::DELTAS.values)
   end
+
+  def to_s
+    "K"
+  end
 end
 
 class Knight < SteppingPiece
@@ -174,6 +192,10 @@ class Knight < SteppingPiece
 
   def moves
     moves_helper(Knight::MOVES)
+  end
+
+  def to_s
+    "N"
   end
 
 end
@@ -211,6 +233,10 @@ class Pawn < SteppingPiece
     end
 
     moves
+  end
+
+  def to_s
+    "P"
   end
 
 end

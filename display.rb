@@ -64,8 +64,15 @@ class Display
         pos = [row_idx, col_idx]
         bc = :yellow if pos == cursor_pos
 
-        space_val = @board[pos] || " "
-        print "#{space_val} ".colorize(color: :red,background: bc)
+        if @board.piece_here(pos)
+          space_val = @board.piece_here(pos)
+          colorize_color = Piece::RENDER_COLOR[space_val.color]
+        else
+          space_val = " "
+          colorize_color = :black
+        end
+
+        print "#{space_val} ".colorize(color: colorize_color, background: bc)
         switch_background_color
       end
       puts
