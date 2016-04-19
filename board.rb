@@ -8,17 +8,19 @@ class Board
   end
 
   def setup_board
-    @grid[0..1].each_with_index do |row, row_idx|
+    (0..1).each do |row_idx|
+      row = @grid[row_idx]
       row.each_with_index do |space, col_idx|
         pos = [row_idx,col_idx]
-        self[pos] = Piece.new(self,"black",pos)
+        self[pos] = Piece.new(self,:black,pos)
       end
     end
 
-    @grid[-2..-1].each_with_index do |row, row_idx|
+    (6..7).each do |row_idx|
+      row = @grid[row_idx]
       row.each_with_index do |space, col_idx|
         pos = [row_idx,col_idx]
-        self[pos] = Piece.new(self,"white",pos)
+        self[pos] = Piece.new(self,:white,pos)
       end
     end
 
@@ -56,7 +58,7 @@ class Board
 end
 
 board = Board.new
-rook = Rook.new(board, :white, [4,4])
-board[ [4,4] ] = rook
+queen = Queen.new(board, :white, [4,4])
+board[ [4,4] ] = queen
 # p bishop
-p rook.moves
+p queen.moves

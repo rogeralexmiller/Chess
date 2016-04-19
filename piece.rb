@@ -74,22 +74,20 @@ class SlidingPiece < Piece
 
   protected
   def check_along_direction(moves, delta)
-    starting_pos = SlidingPiece.next_pos(@pos, delta)
-    while @board.in_bounds?(starting_pos) #&& not @board[current_pos]
-      unless board[starting_pos].nil?
-        debugger
-        piece_here = @board[starting_pos]
-        moves << starting_pos unless piece_here.color == self.color
+    current_pos = SlidingPiece.next_pos(@pos, delta)
+    while @board.in_bounds?(current_pos)
+      unless board[current_pos].nil?
+        piece_here = @board[current_pos]
+        moves << current_pos unless piece_here.color == self.color
         break
       end
-      moves << starting_pos
+      moves << current_pos
 
-      starting_pos = SlidingPiece.next_pos(starting_pos, delta)
+      current_pos = SlidingPiece.next_pos(current_pos, delta)
     end
   end
 
   def self.next_pos(pos, delta)
-    # debugger
     [pos[0] + delta[0], pos[1] + delta[1]]
   end
 
