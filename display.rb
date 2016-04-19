@@ -75,6 +75,10 @@ class Display
   def render
     (0...8).each do |row_idx|
       switch_background_color
+
+      # print number
+      print " #{8-row_idx} "
+
       (0...8).each do |col_idx|
         bc = background_color
         pos = [row_idx, col_idx]
@@ -100,6 +104,8 @@ class Display
       end
       puts
     end
+
+    puts '    ' + ("A".."H").to_a.join('  ')
   end
 
   private
