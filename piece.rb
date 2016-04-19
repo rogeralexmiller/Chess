@@ -16,6 +16,22 @@ class Piece
     @board = board
   end
 
+  def valid_moves
+    moves.select do |move|
+      board_dup = @board.dup
+      begin
+        board_dup.move(@pos,move)
+      rescue RuntimeError => e
+        puts "IN OUR RESCUE!!!!!!"
+
+        puts e.message
+        puts e.backtrace
+        exit(0)
+      end
+      !board_dup.in_check?(@color)
+    end
+  end
+
   def self.add_positions(*positions)
     #[pos[0] + delta[0], pos[1] + delta[1]]
     new_position = Array.new(2, 0)
@@ -29,7 +45,7 @@ class Piece
   end
 
   private
-  attr_reader :pos, :board
+  attr_reader :board
 
 end
 

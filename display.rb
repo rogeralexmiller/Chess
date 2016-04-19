@@ -1,5 +1,7 @@
 require 'colorize'
+require 'io/console'
 require_relative 'board'
+
 
 class Display
 
@@ -27,15 +29,19 @@ class Display
     down: [1, 0]
   }
 
-  def initialize(board,pos = [0,0])
+  attr_accessor :selected, :highlighted_positions
+
+  def initialize(board,game, pos = [0,0])
     @cursor_pos = pos
-    @selected = false
+    @selected = nil
     @board = board
     @background_color = :faux_white
+    @game = game
+    @highlighted_positions = []
   end
 
   def get_input
-    key = KEYMAP[STDIN.getc.chr]
+    key = KEYMAP[STDIN.getch]
     handle_key(key)
   end
 
@@ -43,17 +49,27 @@ class Display
     case key
     when :up, :down, :right, :left
       update_pos(MOVES[key])
+    when :newline, :select
+      if @selected
+        # move_to_space (selected piece --> cursor_position)
+        @game.move_to_space(@cursor_pos)
+      else
+        # select_piece (at the cursor position)
+        @game.select_piece(@cursor_pos)
+      end
     when :quit
       exit(0)
-    when :select
-      # other stuff
-      @selected = !selected
     end
   end
 
   def update_pos(diff)
-    new_pos = [@cursor_pos[0] + diff[0], @cursor_pos[1] + diff[1]]
-    @cursor_pos = new_pos #if @board.in_bounds?(new_pos)
+    new_pos = Piece.add_positions(@cursor_pos, diff)
+    @cursor_pos = new_pos
+  end
+
+  def highlight_valid_moves
+    piece = @board.piece_here(@selected)
+    @highlighted_positions = piece.valid_moves
   end
 
   def render
@@ -62,8 +78,15 @@ class Display
       (0...8).each do |col_idx|
         bc = background_color
         pos = [row_idx, col_idx]
-        bc = :yellow if pos == cursor_pos
 
+        # Set Background color / highlight any valid moves
+        if pos == cursor_pos
+          bc = :yellow
+        elsif @highlighted_positions.include?(pos)
+          bc = :blue
+        end
+
+        # Set color of piece (if there is one)
         if @board.piece_here(pos)
           space_val = @board.piece_here(pos)
           colorize_color = Piece::RENDER_COLOR[space_val.color]
@@ -80,7 +103,7 @@ class Display
   end
 
   private
-  attr_reader :cursor_pos, :board, :background_color, :selected
+  attr_reader :cursor_pos, :board, :background_color
 
   def switch_background_color
     @background_color = (background_color == :faux_white) ? :white : :faux_white
@@ -88,10 +111,14 @@ class Display
 
 end
 
-b = Board.new
-display = Display.new b
-while true
-  system('clear')
-  display.render
-  cursor_move = display.get_input
-end
+# b = Board.new
+# b.move_into_checkmate
+# display = Display.new b
+# until b.checkmate?(:white) || b.checkmate?(:black)
+#   system('clear')
+#   display.render
+#   cursor_move = display.get_input
+# end
+#
+# display.render
+# puts b.checkmate?(:white)

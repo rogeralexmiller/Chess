@@ -69,10 +69,11 @@ class Board
 
   def move(start_pos, end_pos)
     raise "No piece at #{start_pos}" unless self[start_pos]
-    unless self[end_pos].nil? || self[end_pos].color == self[start_pos].nil?
+    if self.piece_here(end_pos) && self[end_pos].color == self[start_pos].color
       raise "That's not a valid space to move to"
     end
     self[end_pos] = self[start_pos]
+    self[end_pos].pos = end_pos
     self[start_pos] = nil
   end
 
@@ -84,7 +85,68 @@ class Board
     self[pos]
   end
 
+  def under_threat?(pos, color)
+    opponent_color = color == :white ? :black : :white
+    opponent_pieces = get_pieces(opponent_color)
+    opponent_pieces.any? do |piece|
+      piece_moves = piece.moves
+      piece_moves.include?(pos)
+    end
+  end
+
+  def in_check?(color)
+    king = get_pieces(color).select { |piece| piece.is_a?(King) }.first
+    under_threat?(king.pos, king.color)
+  end
+
+  def get_pieces(color)
+    pieces = []
+    @grid.each do |row|
+      row.each do |space|
+        pieces << space if space && space.color == color
+      end
+    end
+    pieces
+  end
+
+  def checkmate?(color)
+    opponent_color = color == :white ? :black : :white
+    return false unless in_check?(color)
+    get_pieces(color).all? { |piece| piece.valid_moves.empty? }
+  end
+
+  def dup
+    new_board = Board.new
+
+    @grid.each_with_index do |row, row_index|
+      row.each_with_index do |space, col_index|
+        pos = [row_index, col_index]
+        if self[pos]
+          color = self[pos].color
+          piece_class = self[pos].class
+          new_board[pos] = piece_class.new(new_board, color, pos)
+        else
+          new_board[pos] = nil
+        end
+      end
+    end
+    new_board
+  end
+
+  def move_into_checkmate
+    move([6, 5], [5, 5])
+    move([1, 4], [3, 4])
+    move([6, 6], [4, 6])
+    move([0, 3], [4, 7])
+  end
+
+  protected
+  attr_accessor :grid
 end
 
-board = Board.new
-board.show_board
+# board = Board.new
+# board.move_into_checkmate
+# # king = board[[7,4]]
+# # p board.in_check?(:white)
+# # p king.valid_moves
+# board.show_board
