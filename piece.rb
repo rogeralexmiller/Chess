@@ -116,6 +116,13 @@ class Queen < SlidingPiece
 end
 
 class SteppingPiece < Piece
+  attr_accessor :moved
+
+  def initialize(board, color, pos)
+    super
+    @moved = false
+  end
+
   DELTAS = {
     :up => [-1, 0],
     :down => [1, 0],
@@ -167,6 +174,43 @@ class Knight < SteppingPiece
 
   def moves
     moves_helper(Knight::MOVES)
+  end
+
+end
+
+
+class Pawn < SteppingPiece
+
+  def moves
+
+    moves = []
+
+    delta = color == :white ? DELTAS[:up] : DELTAS[:down]
+
+    front_pos = Piece.add_positions(@pos,delta)
+
+    if @board.in_bounds?(front_pos) && !@board.piece_here(front_pos)
+      moves << front_pos
+
+      unless @moved
+        two_moves_pos = Piece.add_positions(front_pos, delta)
+        unless @board.piece_here(two_moves_pos)
+          moves << two_moves_pos
+        end
+      end
+    end
+
+    left_take = Piece.add_positions(front_pos,DELTAS[:left])
+    right_take = Piece.add_positions(front_pos,DELTAS[:right])
+
+    [left_take, right_take].each do |take|
+      piece = @board.piece_here(take)
+      if @board.in_bounds?(take) && piece && piece.color != self.color
+        moves << take
+      end
+    end
+
+    moves
   end
 
 end

@@ -62,7 +62,7 @@ class Board
 end
 
 board = Board.new
-knight = Knight.new(board, :black, [2,2])
-board[ [2,2] ] = knight
-# p bishop
-p knight.moves
+pawn = Pawn.new(board, :black, [2,2])
+board[ [2,2] ] = pawn
+
+p pawn.moves
