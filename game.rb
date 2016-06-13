@@ -1,6 +1,6 @@
 require_relative 'board'
 require_relative 'display'
-require_relative 'piece'
+require_relative 'pieces/piece'
 
 class Game
 
