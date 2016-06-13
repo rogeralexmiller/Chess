@@ -4,7 +4,7 @@ class Piece
 
   RENDER_COLOR = {
     :white => :green,
-    :black => :red
+    :black => :light_red
   }
 
   attr_reader :color
@@ -108,7 +108,7 @@ class Bishop < SlidingPiece
   end
 
   def to_s
-    "B"
+    "♗"
   end
 end
 
@@ -118,7 +118,7 @@ class Rook < SlidingPiece
   end
 
   def to_s
-    "R"
+    "♖"
   end
 end
 
@@ -128,7 +128,7 @@ class Queen < SlidingPiece
   end
 
   def to_s
-    "Q"
+    "♕"
   end
 
 end
@@ -172,7 +172,7 @@ class King < SteppingPiece
   end
 
   def to_s
-    "K"
+    "♔"
   end
 end
 
@@ -195,7 +195,7 @@ class Knight < SteppingPiece
   end
 
   def to_s
-    "N"
+    "♘"
   end
 
 end
@@ -264,7 +264,7 @@ class Pawn < SteppingPiece
   end
 
   def to_s
-    "P"
+    "♙"
   end
 
   def dup

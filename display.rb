@@ -51,10 +51,8 @@ class Display
       update_pos(MOVES[key])
     when :newline, :select
       if @selected
-        # move_to_space (selected piece --> cursor_position)
         @game.move_to_space(@cursor_pos)
       else
-        # select_piece (at the cursor position)
         @game.select_piece(@cursor_pos)
       end
     when :quit
@@ -77,7 +75,6 @@ class Display
     (0...8).each do |row_idx|
       switch_background_color
 
-      # print number
       print " #{8-row_idx} "
 
       (0...8).each do |col_idx|
@@ -86,9 +83,9 @@ class Display
 
         # Set Background color / highlight any valid moves
         if pos == cursor_pos
-          bc = :yellow
+          bc = :light_cyan
         elsif @highlighted_positions.include?(pos)
-          bc = :blue
+          bc = :light_black
         end
 
         # Set color of piece (if there is one)
