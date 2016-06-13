@@ -30,8 +30,6 @@ class Game
     true
   end
 
-  # We have selected a piece, and we're trying to move it
-  ## OR we want to change our selection
   def move_to_space(cursor_position)
     piece = @board.piece_here(@display.selected)
     moves = @display.highlighted_positions
@@ -50,6 +48,9 @@ class Game
   def run
     until @board.checkmate?(:white) || @board.checkmate?(:black)
       system('clear')
+      puts "Controls:"
+      puts "up:   i   down:  k"
+      puts "left: j   right: l"
       @display.render
       puts "#{@player_turn} is in check" if @board.in_check?(@player_turn)
       @display.get_input
@@ -59,11 +60,9 @@ class Game
     @display.render
     switch_player_turn
     puts "#{@player_turn} wins!"
-    # puts @board.checkmate?(:white)
   end
 
 end
 
 game = Game.new
-
 game.run

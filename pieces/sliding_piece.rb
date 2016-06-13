@@ -11,7 +11,7 @@ class SlidingPiece < Piece
 
   def moves
     moves = []
-    directions = move_dirs
+    directions = []
     direction_deltas = []
     if directions.include?(:diagonal)
       up_diag_deltas = DELTAS[:up_diag]
@@ -32,10 +32,6 @@ class SlidingPiece < Piece
     end
 
     moves
-  end
-
-  def move_dirs
-    []
   end
 
   protected

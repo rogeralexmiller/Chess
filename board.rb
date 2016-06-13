@@ -12,6 +12,74 @@ class Board
     setup_board
   end
 
+  def show_board
+    @grid.each do |row|
+      puts row.join(' ')
+    end
+  end
+
+  def move(start_pos, end_pos)
+    raise "No piece at #{start_pos}" unless self[start_pos]
+    raise "That's not a valid move" if invalid_move?(start_pos, end_pos)
+    self[end_pos] = self[start_pos]
+    piece = self[end_pos]
+    piece.pos = end_pos
+    piece.moved = true
+    self[start_pos] = nil
+  end
+
+  def in_bounds?(pos)
+    pos.all? { |coord| coord.between?(0,7) }
+  end
+
+  def piece_here(pos)
+    self[pos]
+  end
+
+  def under_threat?(pos, color)
+    opponent_color = color == :white ? :black : :white
+    opponent_pieces = get_pieces(opponent_color)
+    opponent_pieces.any? do |piece|
+      piece_moves = piece.moves
+      piece_moves.include?(pos)
+    end
+  end
+
+  def in_check?(color)
+    king = get_pieces(color).select { |piece| piece.is_a?(King) }.first
+    under_threat?(king.pos, king.color)
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+    get_pieces(color).all? { |piece| piece.valid_moves.empty? }
+  end
+
+  def [](pos)
+    row, col = pos[0], pos[1]
+    @grid[row][col]
+  end
+
+  def []=(pos, value)
+    row, col = pos[0], pos[1]
+    @grid[row][col] = value
+  end
+
+  def dup
+    dup_board = Board.new
+
+    @grid.each_with_index do |row, row_index|
+      row.each_with_index do |space, col_index|
+        pos = [row_index, col_index]
+        dup_board = place_on_dup_board(dup_board, pos)
+      end
+    end
+    dup_board
+  end
+
+  private
+  attr_accessor :grid
+
   def setup_board
     place_pawns
     place_minor_pieces
@@ -19,11 +87,11 @@ class Board
   end
 
   def place_pawns
-    [@grid[1], @grid[6]].each_with_index do |row, color|
+    [@grid[1], @grid[6]].each_with_index do |row, player_idx|
       row.each_with_index do |space, col_idx|
-        row_idx = color == 0 ? 1 : 6
+        row_idx = player_idx == 0 ? 1 : 6
         pos = [row_idx, col_idx]
-        piece_color = color == 0 ? :black : :white
+        piece_color = player_idx == 0 ? :black : :white
         self[pos] = Pawn.new(self, piece_color, pos)
       end
     end
@@ -54,58 +122,6 @@ class Board
     self[white_queen_pos] = Queen.new(self, :white, white_queen_pos)
   end
 
-  def show_board
-    @grid.each do |row|
-      puts row.join(' ')
-    end
-  end
-
-  def [](pos)
-    row, col = pos[0], pos[1]
-    @grid[row][col]
-  end
-
-  def []=(pos, value)
-    row, col = pos[0], pos[1]
-    @grid[row][col] = value
-  end
-
-  def move(start_pos, end_pos)
-    raise "No piece at #{start_pos}" unless self[start_pos]
-    if self.piece_here(end_pos) && self[end_pos].color == self[start_pos].color
-      raise "That's not a valid space to move to"
-    end
-
-    self[end_pos] = self[start_pos]
-
-    # Moved piece is now at self[end_pos]
-    self[end_pos].pos = end_pos
-    self[end_pos].moved = true
-    self[start_pos] = nil
-  end
-
-  def in_bounds?(pos)
-    pos.all? { |coord| coord.between?(0,7) }
-  end
-
-  def piece_here(pos)
-    self[pos]
-  end
-
-  def under_threat?(pos, color)
-    opponent_color = color == :white ? :black : :white
-    opponent_pieces = get_pieces(opponent_color)
-    opponent_pieces.any? do |piece|
-      piece_moves = piece.moves
-      piece_moves.include?(pos)
-    end
-  end
-
-  def in_check?(color)
-    king = get_pieces(color).select { |piece| piece.is_a?(King) }.first
-    under_threat?(king.pos, king.color)
-  end
-
   def get_pieces(color)
     pieces = []
     @grid.each do |row|
@@ -116,43 +132,17 @@ class Board
     pieces
   end
 
-  def checkmate?(color)
-    return false unless in_check?(color)
-    get_pieces(color).all? { |piece| piece.valid_moves.empty? }
-  end
-
-  def dup
-    new_board = Board.new
-
-    @grid.each_with_index do |row, row_index|
-      row.each_with_index do |space, col_index|
-        pos = [row_index, col_index]
-        if self[pos]
-          color = self[pos].color
-          piece_class = self[pos].class
-          new_board[pos] = piece_class.new(new_board, color, pos)
-        else
-          new_board[pos] = nil
-        end
-      end
+  def place_on_dup_board(dup_board, pos)
+    piece = self[pos]
+    if piece
+      dup_board[pos] = piece.class.new(dup_board, piece.color, pos)
+    else
+      dup_board[pos] = nil
     end
-    new_board
+    dup_board
   end
 
-  def move_into_checkmate
-    move([6, 5], [5, 5])
-    move([1, 4], [3, 4])
-    move([6, 6], [4, 6])
-    move([0, 3], [4, 7])
+  def invalid_move?(start_pos, end_pos)
+    self.piece_here(end_pos) && self[end_pos].color == self[start_pos].color
   end
-
-  protected
-  attr_accessor :grid
 end
-
-# board = Board.new
-# board.move_into_checkmate
-# # king = board[[7,4]]
-# # p board.in_check?(:white)
-# # p king.valid_moves
-# board.show_board

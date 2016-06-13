@@ -30,7 +30,6 @@ class Piece
   end
 
   def self.add_positions(*positions)
-    #[pos[0] + delta[0], pos[1] + delta[1]]
     new_position = Array.new(2, 0)
 
     positions.each do |pos|

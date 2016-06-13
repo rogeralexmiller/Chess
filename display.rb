@@ -7,14 +7,10 @@ class Display
 
   KEYMAP = {
     " " => :space,
-    "h" => :left,
-    "j" => :down,
-    "k" => :up,
+    "j" => :left,
+    "k" => :down,
+    "i" => :up,
     "l" => :right,
-    "w" => :up,
-    "a" => :left,
-    "s" => :down,
-    "d" => :right,
     "\t" => :tab,
     "\r" => :select,
     "\n" => :newline,
@@ -74,30 +70,13 @@ class Display
     puts "\n"
     (0...8).each do |row_idx|
       switch_background_color
-
       print " #{8-row_idx} "
-
       (0...8).each do |col_idx|
-        bc = background_color
         pos = [row_idx, col_idx]
+        bc = get_background_color(pos)
+        values = space_values(pos)
 
-        # Set Background color / highlight any valid moves
-        if pos == cursor_pos
-          bc = :light_cyan
-        elsif @highlighted_positions.include?(pos)
-          bc = :light_black
-        end
-
-        # Set color of piece (if there is one)
-        if @board.piece_here(pos)
-          space_val = @board.piece_here(pos)
-          colorize_color = Piece::RENDER_COLOR[space_val.color]
-        else
-          space_val = " "
-          colorize_color = :black
-        end
-
-        print " #{space_val} ".colorize(color: colorize_color, background: bc).bold
+        print " #{values[:value]} ".colorize(color: values[:color], background: bc).bold
         switch_background_color
       end
       puts
@@ -106,22 +85,29 @@ class Display
   end
 
   private
+  def space_values(pos)
+    if @board.piece_here(pos)
+      space_val = @board.piece_here(pos)
+      colorize_color = Piece::RENDER_COLOR[space_val.color]
+    else
+      space_val = " "
+      colorize_color = :black
+    end
+    {value: space_val, color: colorize_color}
+  end
+
+  def get_background_color(pos)
+    if pos == cursor_pos
+      :light_cyan
+    elsif @highlighted_positions.include?(pos)
+      :light_black
+    else
+      background_color
+    end
+  end
   attr_reader :cursor_pos, :board, :background_color
 
   def switch_background_color
     @background_color = (background_color == :faux_white) ? :white : :faux_white
   end
-
 end
-
-# b = Board.new
-# b.move_into_checkmate
-# display = Display.new b
-# until b.checkmate?(:white) || b.checkmate?(:black)
-#   system('clear')
-#   display.render
-#   cursor_move = display.get_input
-# end
-#
-# display.render
-# puts b.checkmate?(:white)
