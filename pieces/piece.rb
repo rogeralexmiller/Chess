@@ -18,13 +18,6 @@ class Piece
   def valid_moves
     moves.select do |move|
       board_dup = @board.dup
-      begin
-        board_dup.move(@pos,move)
-      rescue RuntimeError => e
-        puts e.message
-        puts e.backtrace
-        exit(0)
-      end
       !board_dup.in_check?(@color)
     end
   end
@@ -36,7 +29,7 @@ class Piece
       new_position[0] += pos[0]
       new_position[1] += pos[1]
     end
-
+    
     new_position
   end
 

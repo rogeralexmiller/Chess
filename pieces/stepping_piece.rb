@@ -19,7 +19,6 @@ class SteppingPiece < Piece
 
   def moves_helper(deltas)
     moves = []
-
     deltas.each do |delta|
       potential_move = Piece.add_positions(@pos, delta)
       if @board.in_bounds?(potential_move)
