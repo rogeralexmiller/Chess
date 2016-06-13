@@ -1,5 +1,9 @@
-require_relative 'piece'
-require 'byebug'
+require_relative 'pawn'
+require_relative 'king'
+require_relative 'queen'
+require_relative 'bishop'
+require_relative 'knight'
+require_relative 'rook'
 
 class Board
 
