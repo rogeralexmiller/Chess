@@ -31,7 +31,7 @@ class Display
 
   attr_accessor :selected, :highlighted_positions
 
-  def initialize(board,game, pos = [0,0])
+  def initialize(board, game, pos = [0,0])
     @cursor_pos = pos
     @selected = nil
     @board = board

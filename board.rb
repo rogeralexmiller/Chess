@@ -17,7 +17,6 @@ class Board
   def place_pawns
     [@grid[1], @grid[6]].each_with_index do |row, color|
       row.each_with_index do |space, col_idx|
-        # debugger
         row_idx = color == 0 ? 1 : 6
         pos = [row_idx, col_idx]
         piece_color = color == 0 ? :black : :white

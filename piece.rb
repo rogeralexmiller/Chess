@@ -45,7 +45,6 @@ class Piece
 
   private
   attr_reader :board
-
 end
 
 class SlidingPiece < Piece
@@ -74,19 +73,8 @@ class SlidingPiece < Piece
     end
 
     direction_deltas.each do |deltas|
-      # iterate over first set of deltas
-      ## up_diag --> down and to the left
-      ## down_diag --> down and to the right
-      ## horizontal --> to the right
-      ## vertical --> down
       delta1, delta2 = deltas
       self.check_along_direction(moves, delta1)
-
-      # iterate over the second set of deltas
-      ## up_diag --> up and to the right
-      ## down_diag --> up and to the left
-      ## horizontal --> to the left
-      ## vertical --> up
       self.check_along_direction(moves, delta2)
     end
 
@@ -158,6 +146,10 @@ class SteppingPiece < Piece
     :upleft => [-1, -1]
   }
 
+  def valid_step_move?(piece)
+    piece.nil? || piece.color != self.color
+  end
+
   def moves_helper(deltas)
     moves = []
 
@@ -165,18 +157,16 @@ class SteppingPiece < Piece
       potential_move = Piece.add_positions(@pos, delta)
       if @board.in_bounds?(potential_move)
         piece = @board.piece_here(potential_move)
-        if piece.nil? || piece.color != self.color
-          moves << potential_move
-        end
+        moves << potential_move if valid_step_move?(piece)
       end
     end
-
     moves
   end
+
 end
 
 class King < SteppingPiece
-  # Make sure to account for moving into check
+  # Account for moving into check
   def moves
     moves_helper(SteppingPiece::DELTAS.values)
   end
@@ -213,38 +203,64 @@ end
 
 class Pawn < SteppingPiece
 
-  def moves
+  def valid_pawn_move?(position)
+    @board.in_bounds?(position) && !@board.piece_here(position)
+  end
 
-    moves = []
+  def pawn_delta
+    color == :white ? DELTAS[:up] : DELTAS[:down]
+  end
 
-    delta = color == :white ? DELTAS[:up] : DELTAS[:down]
-
-    front_pos = Piece.add_positions(@pos,delta)
-
-    if @board.in_bounds?(front_pos) && !@board.piece_here(front_pos)
-      moves << front_pos
-
-      unless @moved
-        two_moves_pos = Piece.add_positions(front_pos, delta)
-        unless @board.piece_here(two_moves_pos)
-          moves << two_moves_pos
-        end
+  def double_pawn_move_if_valid(front_pos, delta)
+    unless @moved
+      two_moves_pos = Piece.add_positions(front_pos, delta)
+      unless @board.piece_here(two_moves_pos)
+        two_moves_pos
       end
     end
+  end
 
+  def take_positions(front_pos)
     left_take = Piece.add_positions(front_pos,DELTAS[:left])
     right_take = Piece.add_positions(front_pos,DELTAS[:right])
+    [left_take, right_take]
+  end
 
-    [left_take, right_take].each do |take|
+  def valid_take?(piece)
+    piece && piece.color != self.color
+  end
+
+  def add_valid_take_moves(moves, front_pos)
+    takes = take_positions(front_pos)
+
+    takes.each do |take|
       if @board.in_bounds?(take)
         piece = @board.piece_here(take)
-        if @board.in_bounds?(take) && piece && piece.color != self.color
-          moves << take
-        end
+        moves << take if valid_take?(piece)
       end
     end
-
     moves
+  end
+
+  def add_normal_moves(front_pos, delta)
+    moves = []
+
+    if valid_pawn_move?(front_pos)
+      moves << front_pos
+      double_move = double_pawn_move_if_valid(front_pos, delta)
+      moves << double_move if double_move
+    end
+    moves
+  end
+
+  def moves
+    delta = pawn_delta
+
+    front_pos = Piece.add_positions(@pos, delta)
+
+    moves = add_normal_moves(front_pos, delta)
+
+    moves = add_valid_take_moves(moves, front_pos)
   end
 
   def to_s
