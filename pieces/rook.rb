@@ -1,8 +1,8 @@
 require_relative 'sliding_piece'
 
 class Rook < SlidingPiece
-  def move_dirs
-    [:lateral]
+  def move_directions
+    [:lat_vert]
   end
 
   def to_s

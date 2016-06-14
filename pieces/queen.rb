@@ -1,8 +1,8 @@
 require_relative 'sliding_piece'
 
 class Queen < SlidingPiece
-  def move_dirs
-    [:diagonal, :lateral]
+  def move_directions
+    [:diagonal, :lat_vert]
   end
 
   def to_s

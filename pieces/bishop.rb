@@ -1,7 +1,7 @@
 require_relative 'sliding_piece'
 
 class Bishop < SlidingPiece
-  def move_dirs
+  def move_directions
     [:diagonal]
   end
 
