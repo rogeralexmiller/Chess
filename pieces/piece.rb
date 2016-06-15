@@ -29,7 +29,7 @@ class Piece
       new_position[0] += pos[0]
       new_position[1] += pos[1]
     end
-    
+
     new_position
   end
 
