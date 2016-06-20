@@ -99,27 +99,18 @@ class Board
 
   def place_minor_pieces
     [Rook, Knight, Bishop].each_with_index do |piece_class, i|
-      white_left = [7,i]
-      white_right = [7,7-i]
-      black_left = [0,i]
-      black_right = [0,7-i]
-
-      self[white_left] = piece_class.new(self, :white, white_left)
-      self[white_right] = piece_class.new(self, :white, white_right)
-      self[black_left] = piece_class.new(self, :black, black_left)
-      self[black_right] = piece_class.new(self, :black, black_right)
+      self[[7, i]] = piece_class.new(self, :white, [7, i])
+      self[[7, 7-i]] = piece_class.new(self, :white, [7, 7-i])
+      self[[0,i]] = piece_class.new(self, :black, [0,i])
+      self[[0,7-i]] = piece_class.new(self, :black, [0,7-i])
     end
   end
 
   def place_major_pieces
-    black_king_pos = [0, 4]
-    black_queen_pos = [0, 3]
-    white_king_pos = [7, 4]
-    white_queen_pos = [7, 3]
-    self[black_king_pos] = King.new(self, :black, black_king_pos)
-    self[black_queen_pos] = Queen.new(self, :black, black_queen_pos)
-    self[white_king_pos] = King.new(self, :white, white_king_pos)
-    self[white_queen_pos] = Queen.new(self, :white, white_queen_pos)
+    self[[0, 4]] = King.new(self, :black, [0, 4])
+    self[[0, 3]] = Queen.new(self, :black, [0, 3])
+    self[[7, 4]] = King.new(self, :white, [7, 4])
+    self[[7, 3]] = Queen.new(self, :white, [7, 3])
   end
 
   def get_pieces(color)

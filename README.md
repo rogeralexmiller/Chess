@@ -1,6 +1,6 @@
-# Chess Commander
+# Chess Command
 
-Chess commander is a command-line chess game written in Ruby.
+Chess Command is a command-line chess game written in Ruby.
 
 ## Want to play now?
 
@@ -9,9 +9,12 @@ There are many resources that can help you get up and running with Ruby
 but this one stands out: <a href="http://installrails.com/steps/choose_os"> Ruby
 Tutorial </a>
 
-Once Ruby is happily installed, download this repo, navigate to its root with
-your command line
-and enter the following command: `$ ruby game.rb`
+Once Ruby is happily installed, follow these steps:
+1. Open terminal or whatever bash shell you're comfortable with.
+2. Navigate to the folder you want the game to live in.
+3. Run `$ git clone https://github.com/rogeralexmiller/Chess_Command` to clone the repository.
+2. Run `$ cd Chess_command` to go into the folder.
+3. Run `$ ruby chess.rb` to start the game!
 
 ## How did I build it?
 

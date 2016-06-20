@@ -14,7 +14,6 @@ class Game
     @player_turn = @player_turn == :white ? :black : :white
   end
 
-  # We haven't selected a piece, but we want to
   def select_piece(cursor_position)
     piece = @board.piece_here(cursor_position)
 
