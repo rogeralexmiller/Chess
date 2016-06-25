@@ -63,7 +63,7 @@ class Pawn < SteppingPiece
   end
 
   def to_s
-    "♙"
+    @color == :white ? "♙" : "♟"
   end
 
   def dup
