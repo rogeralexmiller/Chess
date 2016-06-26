@@ -40,7 +40,6 @@ class Board
     move([7,2], [5,0])
     move([7,1], [5,2])
 
-    #
     move([1,4], [2,4])
     move([0,5], [1,4])
     move([0,6], [2,5])
@@ -49,9 +48,6 @@ class Board
     move([0,3], [2,3])
     move([0,2], [1,3])
     move([0,1], [2,2])
-
-
-
   end
 
   def in_bounds?(pos)

@@ -18,6 +18,7 @@ class Piece
   def valid_moves
     moves.select do |move|
       board_dup = @board.dup
+      board_dup.move(@pos, move)
       !board_dup.in_check?(@color)
     end
   end
