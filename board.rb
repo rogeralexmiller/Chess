@@ -28,6 +28,32 @@ class Board
     self[start_pos] = nil
   end
 
+  def move_into_castle
+    move([6,4], [5,4])
+    move([7,5], [5,3])
+    move([7,6], [5,5])
+
+    move([6,2], [5,2])
+    move([7,3], [4,0])
+    move([6,1], [5,1])
+    move([5,2], [4,2])
+    move([7,2], [5,0])
+    move([7,1], [5,2])
+
+    #
+    move([1,4], [2,4])
+    move([0,5], [1,4])
+    move([0,6], [2,5])
+
+    move([1,3], [3,3])
+    move([0,3], [2,3])
+    move([0,2], [1,3])
+    move([0,1], [2,2])
+
+
+
+  end
+
   def in_bounds?(pos)
     pos.all? { |coord| coord.between?(0,7) }
   end
@@ -136,4 +162,5 @@ class Board
   def invalid_move?(start_pos, end_pos)
     self.piece_here(end_pos) && self[end_pos].color == self[start_pos].color
   end
+
 end

@@ -1,11 +1,12 @@
 require_relative 'board'
 require_relative 'display'
 require_relative 'pieces/piece'
-
+require 'byebug'
 class Game
 
   def initialize
     @board = Board.new
+    @board.move_into_castle
     @display = Display.new(@board, self)
     @player_turn = :white
   end
@@ -33,6 +34,14 @@ class Game
     piece = @board.piece_here(@display.selected)
     moves = @display.highlighted_positions
     if moves.include?(cursor_position)
+      if piece.class == King && piece.can_castle?
+        if piece.castling_left?(cursor_position)
+          piece.move_castle(:left)
+        end
+        if piece.castling_right?(cursor_position)
+          piece.move_castle(:right)
+        end
+      end
       @board.move(@display.selected, cursor_position)
       @display.selected = nil
       @display.highlighted_positions = []

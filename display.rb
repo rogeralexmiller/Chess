@@ -31,7 +31,7 @@ class Display
     @cursor_pos = pos
     @selected = nil
     @board = board
-    @background_color = :faux_white
+    @background_color = :white
     @game = game
     @highlighted_positions = []
   end
@@ -64,6 +64,11 @@ class Display
   def highlight_valid_moves
     piece = @board.piece_here(@selected)
     @highlighted_positions = piece.valid_moves
+    if piece.class == King
+      @highlighted_positions.concat(piece.get_castle_moves)
+    end
+    # If the selected piece can castle, get its potential castling moves.
+    # If the move is a castle move, trigger the appropriate rook to move to the right space.
   end
 
   def render
