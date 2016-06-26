@@ -6,7 +6,7 @@ class Game
 
   def initialize
     @board = Board.new
-    @board.move_into_castle
+    # @board.move_into_castle
     @display = Display.new(@board, self)
     @player_turn = :white
   end
