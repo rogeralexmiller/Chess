@@ -67,8 +67,6 @@ class Display
     if piece.class == King
       @highlighted_positions.concat(piece.get_castle_moves)
     end
-    # If the selected piece can castle, get its potential castling moves.
-    # If the move is a castle move, trigger the appropriate rook to move to the right space.
   end
 
   def render

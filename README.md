@@ -2,6 +2,10 @@
 
 Chess Command is a command-line chess game written in Ruby.
 
+![Chess]
+
+[Chess]: ./images/chess.png
+
 ## Want to play now?
 
 ### Make sure you have Ruby installed
@@ -12,9 +16,12 @@ Tutorial </a>
 Once Ruby is happily installed, follow these steps:
 1. Open terminal or whatever bash shell you're comfortable with.
 2. Navigate to the folder you want the game to live in.
-3. Run `$ git clone https://github.com/rogeralexmiller/Chess_Command` to clone the repository.
-2. Run `$ cd Chess_command` to go into the folder.
-3. Run `$ ruby chess.rb` to start the game!
+3. To clone the repository run this command:
+`$ git clone https://github.com/rogeralexmiller/Chess_Command`
+2. Navigate into the folder with this command:
+`$ cd Chess_command`
+3. Run this command to start the game!
+ `$ ruby chess.rb`
 
 ## How did I build it?
 

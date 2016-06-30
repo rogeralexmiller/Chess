@@ -57,8 +57,12 @@ class Game
     until @board.checkmate?(:white) || @board.checkmate?(:black)
       system('clear')
       puts "Controls:"
-      puts "up:   i   down:  k"
-      puts "left: j   right: l"
+      puts "up:   i"
+      puts "down:  k"
+      puts "left:  j"
+      puts "right: l"
+      puts "quit: q"
+      puts ""
       @display.render
       puts "#{@player_turn} is in check" if @board.in_check?(@player_turn)
       @display.get_input
