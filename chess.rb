@@ -61,8 +61,10 @@ class Game
       puts "down:  k"
       puts "left:  j"
       puts "right: l"
+      puts "select piece: Enter"
       puts "quit: q"
       puts ""
+      puts "#{@player_turn}'s turn"
       @display.render
       puts "#{@player_turn} is in check" if @board.in_check?(@player_turn)
       @display.get_input
