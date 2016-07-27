@@ -14,6 +14,7 @@ but this one stands out: <a href="http://installrails.com/steps/choose_os"> Ruby
 Tutorial </a>
 
 Once Ruby is happily installed, follow these steps:
+
 1. Open terminal or whatever bash shell you're comfortable with.
 2. Navigate to the folder you want the game to live in.
 3. To clone the repository run this command:
