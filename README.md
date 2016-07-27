@@ -105,7 +105,49 @@ def moves_helper(deltas)
 end
 ```
 
+#### Castling
+Castling was a tricky feature to implement since it breaks the basic rules of how
+both kings and rooks move. To implement castling, I augmented the King class
+to get castling moves if any are available.
+
+```
+king.rb
+
+def get_castle_moves
+  moves = []
+  if can_castle?
+    if can_castle_left?
+      moves.concat(castle_moves(:left))
+    end
+    if can_castle_right?
+      moves.concat(castle_moves(:right))
+    end
+  end
+  moves
+end
+```
+
+To coordinate the movement of both the king and rooks I decided to delegate all
+castling movement to the king, which moves its appropriate rook if a castling
+move is taking place.
+```
+chess.rb
+
+def move_to_space(cursor_position)
+  piece = @board.piece_here(@display.selected)
+  moves = @display.highlighted_positions
+  if moves.include?(cursor_position)
+    if piece.class == King && piece.can_castle?
+      if piece.castling_left?(cursor_position)
+        piece.move_castle(:left)
+      end
+      if piece.castling_right?(cursor_position)
+        piece.move_castle(:right)
+      end
+    end
+    ...
+```
 
 ## Future Improvements
 
-Going forward, I plan on adding castling and en passant moves to this chess game.
+Going forward, I plan on adding en passant moves to this chess game.

@@ -57,9 +57,9 @@ class Game
     until @board.checkmate?(:white) || @board.checkmate?(:black)
       system('clear')
       puts "Controls:"
-      puts "up:   i"
+      puts "up:   j"
       puts "down:  k"
-      puts "left:  j"
+      puts "left:  h"
       puts "right: l"
       puts "select piece: Enter"
       puts "quit: q"

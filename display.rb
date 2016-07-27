@@ -7,9 +7,9 @@ class Display
 
   KEYMAP = {
     " " => :space,
-    "j" => :left,
+    "h" => :left,
     "k" => :down,
-    "i" => :up,
+    "j" => :up,
     "l" => :right,
     "\t" => :tab,
     "\r" => :select,
