@@ -20,7 +20,7 @@ Once Ruby is happily installed, follow these steps:
 3. To clone the repository run this command:
 `$ git clone https://github.com/rogeralexmiller/Chess_Command`
 4. Navigate into the folder with this command:
-`$ cd Chess_command`
+`$ cd Chess_Command`
 5. Run this command to install the game's Ruby dependencies:
 `$ bundle install`
 6. Run this command to start the game!
